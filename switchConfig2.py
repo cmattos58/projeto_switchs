@@ -33,8 +33,11 @@ class SwitchTelnet:
             print("Autenticado com sucesso. Entrando no modo privilegiado...")
             #pdb.set_trace()
             self.connection.write(b"en\n")
-            #self.connection.read_until(b"Password:")
-            #self.connection.write(self.enable_password.encode('ascii') + b"\n")
+            print(enable_password)
+            time.sleep(2)
+            if self.enable_password:
+                self.connection.read_until(b"Password:")
+                self.connection.write(self.enable_password.encode('ascii') + b"\n")
             
             # Espera o prompt no modo privilegiado
             time.sleep(1)
@@ -58,7 +61,7 @@ class SwitchTelnet:
             
             # Espera a resposta e lê o resultado
             print("Aguardando resposta do switch...")
-            time.sleep(3)
+            time.sleep(10)
             output = self.connection.read_very_eager().decode('ascii')
             print("Configuração extraída com sucesso!")
             return output
@@ -80,14 +83,15 @@ if __name__ == "__main__":
 
     host = input("Digite o IP do switch: ")
     username = input("Digite o usuário: ")
-    print(username)
-    #password = getpass.getpass("Digite a senha: ")
-    password = input("Digite a senha: ")
+    #print(username)
 
-    print(password)
-    #enable_password = getpass.getpass("Digite a senha enable: ")
-    enable_password = input("Digite a senha enable: ")
-    print(enable_password)
+    password = getpass.getpass("Digite a senha: ")
+    #password = input("Digite a senha: ")
+    #print(password)
+
+    enable_password = getpass.getpass("Digite a senha enable: ")
+    #enable_password = input("Digite a senha enable: ")
+    #print(enable_password)
 
     # Instancia a classe com os parâmetros informados pelo usuário
     switch = SwitchTelnet(host, username, password, enable_password)
